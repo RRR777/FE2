@@ -7,6 +7,7 @@ export default class Card extends React.Component {
 
     this.state = {
       opened: false,
+      pressed: false,
     };
   }
 
@@ -17,6 +18,14 @@ export default class Card extends React.Component {
       opened: !opened,
     });
   };
+
+    toggleHeart = () => {
+         const { pressed } = this.state;
+
+        this.setState({
+            pressed: !pressed,
+        });
+    };
 
   render() {
     const {
@@ -30,6 +39,7 @@ export default class Card extends React.Component {
       },
     } = this.props;
     const { opened } = this.state;
+    const { pressed } = this.state;
 
     return (
       <div className="card">
@@ -42,9 +52,13 @@ export default class Card extends React.Component {
           {original_title}
         </div>
 
-        <div className="card__like">
-          <i className="fa fa-heart-o" />
-        </div>
+        <div className="card__like" onClick={this.toggleHeart}>
+            {pressed
+                ? <i className="fa fa-heart" />
+                : <i className="fa fa-heart-o" />
+            }
+         </div>
+
 
         <div className="card__subtitle">
           <span>{release_date}</span>
@@ -62,6 +76,7 @@ export default class Card extends React.Component {
           }
 
         </div>
+
       </div>
     );
   }
