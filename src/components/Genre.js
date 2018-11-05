@@ -1,37 +1,44 @@
 import React from 'react';
+import axios from "axios";
+import {endpoints} from "../../config";
 
 export default class Genre extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
-            clicked : false,
+            genreMovieList: [],
         };
-        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick = (id) => {
-        const { clicked } = this.state;
+    requestGenreMovies = () => {
+        axios
+            .get(endpoints.genreMovies(this.props.genres.id))
+            .then((res) => this.setGenreMovieList(res.data.results))
+            .catch((error) => console.log(error));
+    };
+
+    setGenreMovieList = (genreMovieList) => {
         this.setState({
-            clicked : !clicked,
+            genreMovieList,
         });
     };
 
+    getGenreMovies = () => {
+        this.requestGenreMovies();
+        this.props.changeGenre(this.state.genreMovieList);
+    }
+
     render() {
         const {
-            genre: {
-                id,
-                name,
-            },
+            genres: { name }
         } = this.props;
 
         return (
             <div className="genre">
-                <div>
-                    <button className="btn btn-primary"  onClick={() => this.handleClick(id)}>
-                        {name}
-                    </button>
-                </div>
+                <button className="btn btn-primary" onClick={this.getGenreMovies}>
+                    {name}
+                </button>
             </div>
         );
     }

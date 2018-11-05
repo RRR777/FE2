@@ -17,13 +17,6 @@ export default class App extends React.Component {
     this.requestGenres();
   }
 
-  requestGenres = () => {
-    axios
-      .get(endpoints.genres())
-      .then((res) => this.setGenresList(res.data.genres))
-      .catch((error) => console.log(error));
-  };
-
   requestMovies = () => {
       axios
           .get(endpoints.mostPopularMovies())
@@ -31,24 +24,29 @@ export default class App extends React.Component {
           .catch((error) => console.log(error));
   };
 
-  requestGenresMovies = () => {
-      axios
-          .get(endpoints.genreMovies())
-          .then((res) => this.setMovieList(res.data.results))
-          .catch((error) => console.log(error));
+  requestGenres = () => {
+    axios
+      .get(endpoints.genres())
+      .then((res) => this.setGenresList(res.data.genres))
+      .catch((error) => console.log(error));
   };
-
 
   setMovieList = (movieList) => {
     this.setState({
-        movieList : movieList,
+        movieList,
     })
   };
 
   setGenresList = (genresList) => {
       this.setState({
-          genresList : genresList,
+          genresList,
       })
+  };
+
+  changeGenre = (movieList) => {
+      this.setState({
+          movieList,
+      });
   };
 
   render() {
@@ -61,7 +59,7 @@ export default class App extends React.Component {
         <div>
             <div className="genre">
                 <h2 className="title">Genres</h2>
-                {genresList.map((genre) => <Genre genre={genre}/>)}
+                {genresList.map((genres) => <Genre genres={genres} changeGenre={this.changeGenre}/>)}
             </div>
             <div className="cards">
                {movieList.map((movie) => <Card movie={movie} />)}
